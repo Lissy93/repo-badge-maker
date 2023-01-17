@@ -1,0 +1,212 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Repo Badges</title>
+    <meta name="description" content="Simple script for quickly generating badges for a GH repo">
+</head>
+
+<body>
+  <h1>Repo Badges</h1>
+
+  <section class="input-section">
+    <h3>Input</h3>
+    <label for="repoLink">Enter a GitHub Repo URL</label>
+    <input id="repoLink" onfocus="getClipboardValue()" />
+    <button onClick="generateOutput()">Generate</button>
+  </section>
+
+  <section class="output-section">
+    <h3>Output</h3>
+    <textarea id="result"></textarea>
+    <h3>Preview</h3>
+    <div id="preview"></div>
+  </section>
+
+  <section class="about-section">
+    <h3>About</h3>
+    <p>
+      Just a very simple script to generate badges for a repository, outputted in markdown format.
+      The badges are generated using the <a href="https://shields.io/">Shields.io</a> API.
+      Includes a badge for + link to the author, the repo + star count, and the language used.
+      Paste in the URL to a repo, hit 'Generate', and results will be copied to your clipboard.
+    </p>
+    <p class="license-info">
+      Code available on GitHub at
+      <a href="https://github.com/Lissy93/repo-badge-maker">Lissy93/repo-badge-maker</a>
+      <br>
+      Licensed under MIT, © <a href="https://aliciasykes.com">Alicia Sykes</a> 2023
+    </p>
+  </section>
+
+<script>
+
+let previewBadges = [];
+
+const badgeConfigs = {
+  c: { name: 'C', color: 'A8B9CC', icon: 'c' },
+  'c++': { name: 'C++', color: '00599C', icon: 'cplusplus' },
+  'c#': { name: 'C#', color: '239120', icon: 'csharp' },
+  go: { name: 'Go Lang', color: '00ADD8', icon: 'go' },
+  java: { name: 'Java', color: '007396', icon: 'java' },
+  javascript: { name: 'JavaScript', color: 'F7DF1E', icon: 'javascript' },
+  php: { name: 'PHP', color: '777BB4', icon: 'php' },
+  python: { name: 'Python', color: '3C78A9', icon: 'python' },
+  perl: { name: 'Perl', color: '39457E', icon: 'perl' },
+  ruby: { name: 'Ruby', color: 'CC342D', icon: 'ruby' },
+  rust: { name: 'Rust', color: 'e86243', icon: 'rust' },
+  scala: { name: 'Scala', color: 'DC322F', icon: 'scala' },
+  typescript: { name: 'TypeScript', color: '3178C6', icon: 'typescript' },
+  vue: { name: 'Vue.js', color: '4FC08D', icon: 'vuedotjs' },
+  node: { name: 'Node.js', color: '339933', icon: 'nodedotjs' },
+  swift: { name: 'Swift', color: 'F05138', icon: 'swift' },
+  bash: { name: 'Bash', color: '4EAA25', icon: 'gnubash' },
+  dockerfile: { name: 'Docker', color: '2496ED', icon: 'docker' },
+  flutter: { name: 'Flutter', color: '02569B', icon: 'flutter' },
+  angular: { name: 'Angular', color: 'DD0031', icon: 'angular' },
+  coffeescript: { name: 'CoffeeScript', color: '2F2625', icon: 'coffeescript' },
+};
+
+const getBadgeForLanguage = async (language) => {
+  const langConfig = badgeConfigs[language.toLowerCase()];
+  if (!langConfig) return '';
+  const badgeUrl = `https://img.shields.io/static/v1?label=&message=${langConfig.name}`
+    + `&color=${langConfig.color}&logo=${langConfig.icon}&logoColor=FFFFFF`;
+  previewBadges.push(badgeUrl);
+  return `![Written in ${language}](${badgeUrl})`;
+};
+
+const getLanguage = async (user, repo) => {
+  const apiUrl = `https://api.github.com/repos/${user}/${repo}/languages`;
+  return fetch(apiUrl)
+    .then((response) => response.json())
+    .then((data) => Object.keys(data)[0])
+    .then((lang) => getBadgeForLanguage(lang))
+    .catch((e) => '');
+};
+
+const makeMarkdownButtons = async (repoUrl) => {
+  const [ user, repo ] = new URL(repoUrl).pathname.split('/').filter(p => p.length > 0);
+  const shieldsIoUrl = 'https://img.shields.io'
+  const authorBadge = `${shieldsIoUrl}/badge/${user}-b820f9?labelColor=b820f9&logo=githubsponsors&logoColor=fff`;
+  const langBadge = await getLanguage(user, repo);
+  const repoBadge = `${shieldsIoUrl}/github/stars/${user}/${repo}?color=232323&label=${repo}&logo=github&labelColor=232323`;
+  previewBadges.push(repoBadge, authorBadge);
+  return `[![View ${repo} on GitHub](${repoBadge})](${repoUrl}) [![Author ${user}](${authorBadge})](https://github.com/${user}) ${langBadge}`;
+};
+
+const generatePreview = async () => {
+  const preview = document.getElementById('preview');
+  preview.innerHTML = '';
+  previewBadges.forEach(badge => {
+    const img = document.createElement('img');
+    img.src = badge;
+    preview.appendChild(img);
+  });
+};
+
+const showOutputSection = () => {
+  const outputSection = document.querySelector('.output-section');
+  outputSection.style.display = 'flex';
+};
+
+const generateOutput = async () => {
+  showOutputSection();
+  const userVal = document.getElementById('repoLink').value;
+  const result = await makeMarkdownButtons(userVal);
+  navigator.clipboard.writeText(result);
+  document.getElementById('result').value = result;
+  generatePreview();
+};
+
+const getClipboardValue = async () => {
+  if (navigator.clipboard.readText) {
+    navigator.clipboard.readText()
+    .then((clipText) => document.querySelector('.repoLink').innerText = clipText);
+  }
+};
+</script>
+
+<style>
+  body {
+    font-family: "Roboto", Verdana, Helvetica, sans-serif;
+    color: white;
+    background: #0d0e20;
+    padding-bottom: 2rem;
+  }
+  h1 {
+    font-size: 2.5rem;
+    text-align: center;
+  }
+  h3 {
+    margin: 0;
+  }
+  textarea, input, button, pre {
+    color: #fff;
+    font-family: courier, sans-serif;
+    height: 150px;
+    outline: none;
+    border: 2px solid #00010a8c;
+    border-radius: 5px;
+    margin: 1rem;
+    background: #0d0e20;
+  }
+  textarea {
+    resize:none;
+  }
+  input {
+    height: 2.5rem;
+    padding: 0 1rem;
+    font-size: 1rem;
+  }
+  label {
+    margin: 1rem 1rem 0;
+    font-style: italic;
+  }
+  button {
+    height: 2.5rem;
+    margin: 0 1rem 1rem;
+    font-size: 1rem;
+    font-weight: thin;
+    font-family: "Roboto", Verdana, Helvetica, sans-serif;
+    cursor: pointer;
+  }
+  pre {
+    min-height: 150px;
+    height: fit-content;
+    overflow: hidden;
+    padding: 0.5rem;
+  }
+  input:focus, textarea:focus, button:hover {
+    background: #00010a8c;
+  }
+  .input-section, .output-section, .about-section {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    margin: 1rem auto;
+    padding: 1rem;
+    border-radius: 5px;
+    background: #ffffff0a;
+    box-shadow: 2px 10px 10px rgb(0 0 0 / 33%), 0 1px 2px rgba(0,0,0,0.24);
+    max-width: 800px;
+  }
+  .output-section {
+    display: none;
+  }
+  .license-info {
+    font-size: 0.8rem;
+    margin: 0;
+    text-align: center;
+    opacity: 0.8;
+  }
+  img {
+    margin: 0.25rem;
+  }
+  a {
+    color: #fff;
+  }
+</style>
+</body>
+
+</html>

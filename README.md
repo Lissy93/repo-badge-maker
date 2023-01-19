@@ -13,13 +13,13 @@
 ## About
 I made this to quickly generate the project links, for this post: [CLI tools you won't be able to live without 🔧 ](https://dev.to/lissy93/cli-tools-you-cant-live-without-57f6)
 
-Just a simple script to generate repo badges using the <a href="https://shields.io/">Shields.io</a> and GitHub APIs, outputted in markdown.<br>
+Just a simple script to generate markdown repo badges using the <a href="https://shields.io/">Shields.io</a> and GitHub APIs.<br>
 Includes a badge for + link to the author, the repo + star count, and the language used.<br>
 Paste in the URL to a repo, hit 'Generate', and results will be copied to your clipboard.
 
 ## Deployment
-It's just a static HTML page, so can be served up directly from any CDN, static hosting provider or with a web server.<br>
-There's a demo hosted on Netlify, at: [repo-badges.netlify.app](https://repo-badges.netlify.app/)
+It's just a static HTML page, so serve it with any web server, CDN or static host.<br>
+There's a demo hosted on GH Pages, at: [lissy93.github.io/repo-badge-maker](https://lissy93.github.io/repo-badge-maker/)
 
 ## License
 

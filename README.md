@@ -1,7 +1,7 @@
 
 <h1 align="center">🛡️ Repo Badge Generator</h1>
 <p align="center">
-  <i>Very, very quick script to quickly generate repository badges</i><br>
+  <i>Quick script to generate embedable badges for a repository</i><br>
   <b><a href="https://repo-badges.as93.net">repo-badges.as93.net</a></b>
 </p>
 <p align="center">
@@ -13,13 +13,23 @@
 ## About
 I made this to quickly generate the project links, for this post: [CLI tools you won't be able to live without 🔧 ](https://dev.to/lissy93/cli-tools-you-cant-live-without-57f6)
 
-Just a simple script to generate markdown repo badges using the <a href="https://shields.io/">Shields.io</a> and GitHub APIs.<br>
-Includes a badge for + link to the author, the repo + star count, and the language used.<br>
+Just a simple script to quickly generate embedable markdown badges to show repository info.<br>
+Data is fetched from the GitHub API, and badges are served up using the <a href="https://shields.io/">Shields.io</a> API.<br>
+Includes a badge for + link to: the author, the repo + star count, and the language used.<br>
 Paste in the URL to a repo, hit 'Generate', and results will be copied to your clipboard.
 
 ## Deployment
 It's just a static HTML page, so serve it with any web server, CDN or static host.<br>
 There's a demo hosted on GH Pages, at: [lissy93.github.io/repo-badge-maker](https://lissy93.github.io/repo-badge-maker/)
+
+## Report an Issue
+Found something that's not working? [Open an issue](https://github.com/Lissy93/repo-badge-maker/issues/new/choose), and describe the problem, steps to reproduce alond with expected and actual output. If relevant, also include details about your environment. I'll try and fix / respond to any tickets within 48-hours.
+
+## Contributing
+Contributions of any kind are very welcome, and would be much appreiciated.
+For Code of Conduct, see [Contributor Convent](https://www.contributor-covenant.org/version/2/1/code_of_conduct/).
+
+To get started, fork the repo, make your changes, add, commit and push the code, then come back here to open a pull request. If you're new to GitHub or open source, [this guide](https://www.freecodecamp.org/news/how-to-make-your-first-pull-request-on-github-3#let-s-make-our-first-pull-request-) or the [git docs](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request) may help you get started, but feel free to reach out if you need any support.
 
 ## License
 

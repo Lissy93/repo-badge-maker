@@ -111,6 +111,7 @@ const showOutputSection = () => {
 };
 
 const generateOutput = async () => {
+  previewBadges = [];
   showOutputSection();
   const userVal = document.getElementById('repoLink').value;
   const result = await makeMarkdownButtons(userVal);
